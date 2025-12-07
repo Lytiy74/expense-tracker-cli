@@ -1,7 +1,8 @@
 package ua.azaika.expensetrackercli.commands;
 
 import org.springframework.shell.command.annotation.Command;
-import ua.azaika.expensetrackercli.model.Transaction;
+import org.springframework.shell.command.annotation.Option;
+import ua.azaika.expensetrackercli.model.TransactionDTO;
 import ua.azaika.expensetrackercli.services.ExpenseService;
 
 import java.util.List;
@@ -15,12 +16,17 @@ public class GeneralCommands {
     }
 
     @Command(alias = "add",description = "Add expense")
-    public String addExpense(String description, double amount) {
+    public String addExpense(@Option(shortNames = 'd') String description, @Option(shortNames = 'a') double amount) {
         return expenseService.addExpense(description, amount);
     }
 
     @Command(alias = "list",description = "List all expenses")
-    public List<Transaction> listExpenses() {
+    public List<TransactionDTO> listExpenses() {
         return expenseService.getTransactions();
+    }
+
+    @Command(alias = "summary", description = "print sum of transactions")
+    public Double summary() {
+        return  expenseService.getSummary();
     }
 }
