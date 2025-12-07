@@ -3,7 +3,7 @@ package ua.azaika.expensetrackercli.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "transactions")
@@ -22,5 +22,5 @@ public class TransactionEntity {
 
     private Double amount;
 
-    private LocalDateTime timestamp;
+    private LocalDate date;
 }

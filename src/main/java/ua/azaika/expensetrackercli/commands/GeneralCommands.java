@@ -7,6 +7,7 @@ import ua.azaika.expensetrackercli.model.TransactionDTO;
 import ua.azaika.expensetrackercli.model.TransactionEntity;
 import ua.azaika.expensetrackercli.services.ExpenseService;
 
+import java.time.Month;
 import java.util.List;
 
 @Command
@@ -31,7 +32,10 @@ public class GeneralCommands {
     }
 
     @Command(alias = "summary", description = "print sum of transactions")
-    public Double summary() {
-        return  expenseService.getSummary();
+    public Double summary(@Option(shortNames = 'm') Month month) {
+        if (month == null) {
+            return expenseService.getSummary();
+        }
+        return expenseService.getSummaryByMonth(month);
     }
 }

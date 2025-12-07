@@ -1,18 +1,18 @@
 package ua.azaika.expensetrackercli.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public record TransactionDTO(
         String description,
         Double amount,
-        LocalDateTime timestamp
+        LocalDate date
 ) {
     @Override
     public String toString() {
         return "TransactionDTO{" +
                 "description='" + description + '\'' +
                 ", amount=" + amount +
-                ", timestamp=" + timestamp.toLocalDate() +
+                ", date=" + date.toString() +
                 '}';
     }
 }
