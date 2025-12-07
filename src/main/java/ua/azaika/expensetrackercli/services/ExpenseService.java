@@ -1,27 +1,36 @@
 package ua.azaika.expensetrackercli.services;
 
 import org.springframework.stereotype.Service;
-import ua.azaika.expensetrackercli.model.TransactionDTO;
+import ua.azaika.expensetrackercli.model.TransactionEntity;
+import ua.azaika.expensetrackercli.repository.TransactionRepository;
 
 import java.time.LocalDateTime;
-import java.util.LinkedList;
 import java.util.List;
 
 @Service
 public class ExpenseService {
-    private final List<TransactionDTO> transactionDTOS = new LinkedList<>();
+    private final TransactionRepository repository;
+
+    public ExpenseService(TransactionRepository repository) {
+        this.repository = repository;
+    }
 
     public String addExpense(String description, double amount) {
-        TransactionDTO transactionDTO = new TransactionDTO(description, amount, LocalDateTime.now());
-        transactionDTOS.add(transactionDTO);
+        TransactionEntity entity = TransactionEntity.builder()
+                .description(description)
+                .amount(amount)
+                .timestamp(LocalDateTime.now())
+                .build();
+        repository.save(entity);
         return "Expense added";
     }
 
-    public List<TransactionDTO> getTransactions() {
-        return transactionDTOS;
+    public List<TransactionEntity> getTransactions() {
+        return repository.findAll();
     }
 
     public Double getSummary() {
-        return transactionDTOS.stream().mapToDouble(TransactionDTO::amount).sum();
+        List<TransactionEntity> transactions = getTransactions();
+        return transactions.stream().mapToDouble(TransactionEntity::getAmount).sum();
     }
 }
