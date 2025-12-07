@@ -26,9 +26,12 @@ public class GeneralCommands {
     }
 
     @Command(alias = "list",description = "List all expenses")
-    public List<TransactionDTO> listExpenses() {
+    public String listExpenses() {
         List<TransactionEntity> transactions = expenseService.getTransactions();
-        return transactions.stream().map(mapper::toDto).toList();
+        List<TransactionDTO> transactionDTOS = transactions.stream().map(mapper::toDto).toList();
+        StringBuilder stringBuilder = new StringBuilder();
+        transactionDTOS.forEach(transactionDTO -> stringBuilder.append(transactionDTO).append("\n"));
+        return stringBuilder.toString();
     }
 
     @Command(alias = "summary", description = "print sum of transactions")

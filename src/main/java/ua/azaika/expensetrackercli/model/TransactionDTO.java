@@ -3,6 +3,7 @@ package ua.azaika.expensetrackercli.model;
 import java.time.LocalDate;
 
 public record TransactionDTO(
+        Integer id,
         String description,
         Double amount,
         LocalDate date
@@ -10,9 +11,10 @@ public record TransactionDTO(
     @Override
     public String toString() {
         return "TransactionDTO{" +
-                "description='" + description + '\'' +
+                "id=" + id +
+                ", description='" + description + '\'' +
                 ", amount=" + amount +
-                ", date=" + date.toString() +
+                ", date=" + date +
                 '}';
     }
 }
