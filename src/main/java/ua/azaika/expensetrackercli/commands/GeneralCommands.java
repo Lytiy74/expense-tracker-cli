@@ -41,4 +41,9 @@ public class GeneralCommands {
         }
         return expenseService.getSummaryByMonth(month);
     }
+
+    @Command(alias = "delete", description = "delete expense by id")
+    public void deleteById(Integer id) {
+        expenseService.deleteById(id);
+    }
 }

@@ -31,6 +31,10 @@ public class ExpenseService {
         return repository.findAll();
     }
 
+    public void deleteById(Integer id) {
+        repository.deleteById(id);
+    }
+
     public Double getSummary() {
         List<TransactionEntity> transactions = getTransactions();
         return transactions.stream().mapToDouble(TransactionEntity::getAmount).sum();
