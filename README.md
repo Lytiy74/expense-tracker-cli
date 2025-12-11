@@ -1,9 +1,12 @@
 Expense Tracker CLI
 ====================
 
+
 A small command-line expense tracker built with Spring Boot and Spring Shell. It persists data in an on-disk H2 database
 and provides simple commands to add, list, summarize, update, and delete expenses.
 
+A simple **Command Line Interface (CLI)** application built with Java to track expenses.
+From https://roadmap.sh/projects/expense-tracker
 
 Overview
 --------
