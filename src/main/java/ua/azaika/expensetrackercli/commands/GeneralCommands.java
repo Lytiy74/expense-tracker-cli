@@ -12,11 +12,15 @@ import java.util.List;
 public class GeneralCommands {
     private final ExpenseService expenseService;
 
+    private static final String EXPENSE_ADDED = "Expense with amount %s , description %s added";
+    private static final String EXPENSE_HEADER = "%-4s | %-10s | %-25s | %10s\n";
+    private static final String EXPENSE_DESCRIPTION = "%-4d | %tY-%<tm-%<td | %-25s | %10.2f\n";
+
     public GeneralCommands(ExpenseService expenseService) {
         this.expenseService = expenseService;
     }
 
-    @Command(alias = "add",description = "Add expense")
+    @Command(alias = "add", description = "Add expense")
     public String addExpense(@Option(shortNames = 'd') String description, @Option(shortNames = 'a') Double amount) {
         if (description == null || amount == null) {
             return "Invalid arguments";
@@ -24,14 +28,16 @@ public class GeneralCommands {
 
         TransactionDTO dto = new TransactionDTO(null, description, amount, null);
 
-        return expenseService.addExpense(dto);
+        TransactionDTO transactionDTO = expenseService.addExpense(dto);
+        return String.format(EXPENSE_ADDED, transactionDTO.amount(), transactionDTO.description());
     }
 
-    @Command(alias = "list",description = "List all expenses")
+    @Command(alias = "list", description = "List all expenses")
     public String listExpenses() {
         List<TransactionDTO> transactions = expenseService.getTransactions();
         StringBuilder stringBuilder = new StringBuilder();
-        transactions.forEach(transactionDTO -> stringBuilder.append(transactionDTO).append("\n"));
+        stringBuilder.append(String.format(EXPENSE_HEADER, "id", "date", "description", "amount"));
+        transactions.forEach(t -> stringBuilder.append(String.format(EXPENSE_DESCRIPTION, t.id(), t.date(), t.description(), t.amount())));
         return stringBuilder.toString();
     }
 
@@ -47,7 +53,7 @@ public class GeneralCommands {
     public String updateById(@Option(shortNames = 'i') Integer id,
                              @Option(shortNames = 'd') String description,
                              @Option(shortNames = 'a') Double amount) {
-        if (id == null || description == null || amount == null) {
+        if (id == null || description == null && amount == null) {
             return "Invalid arguments";
         }
 

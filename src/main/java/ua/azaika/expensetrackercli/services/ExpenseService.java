@@ -21,11 +21,11 @@ public class ExpenseService {
         this.mapper = mapper;
     }
 
-    public String addExpense(TransactionDTO dto) {
+    public TransactionDTO addExpense(TransactionDTO dto) {
         TransactionEntity entity = mapper.toEntity(dto);
         entity.setDate(LocalDate.now());
-        repository.save(entity);
-        return "Expense added";
+        TransactionEntity saved = repository.save(entity);
+        return mapper.toDto(saved);
     }
 
     public List<TransactionDTO> getTransactions() {
@@ -37,7 +37,12 @@ public class ExpenseService {
     }
 
     public TransactionDTO updateById(TransactionDTO dto) {
-        TransactionEntity entity = mapper.toEntity(dto);
+        TransactionEntity entity = repository.findById(dto.id()).orElseThrow(() -> new IllegalArgumentException("No such transaction"));
+        if (dto.description() != null) {
+            entity.setDescription(dto.description());
+        } else if (dto.amount() != null) {
+            entity.setAmount(dto.amount());
+        }
         return mapper.toDto(repository.save(entity));
     }
 
