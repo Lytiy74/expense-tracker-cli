@@ -53,7 +53,7 @@ public class GeneralCommands {
     public String updateById(@Option(shortNames = 'i') Integer id,
                              @Option(shortNames = 'd') String description,
                              @Option(shortNames = 'a') Double amount) {
-        if (id == null || description == null && amount == null) {
+        if (id == null || (description == null && amount == null)) {
             return "Invalid arguments";
         }
 
@@ -63,7 +63,11 @@ public class GeneralCommands {
     }
 
     @Command(alias = "delete", description = "delete expense by id")
-    public void deleteById(Integer id) {
+    public String deleteById(@Option(shortNames = 'i') Integer id) {
+        if (id == null) {
+            return "Invalid arguments";
+        }
         expenseService.deleteById(id);
+        return "Expense deleted";
     }
 }

@@ -14,4 +14,7 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
     @Query("SELECT e FROM TransactionEntity e WHERE e.date >= :start AND e.date <= :end")
     List<TransactionEntity> findTransactionByMonth(@Param("start") LocalDate startOfMonth,
                                                    @Param("end") LocalDate endOfMonth);
+
+    @Query("SELECT SUM(e.amount) FROM TransactionEntity e")
+    Double sumAllAmounts();
 }

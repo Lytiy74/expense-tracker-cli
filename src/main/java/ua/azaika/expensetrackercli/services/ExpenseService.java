@@ -33,22 +33,25 @@ public class ExpenseService {
     }
 
     public void deleteById(Integer id) {
+        if (!repository.existsById(id)) {
+            throw new IllegalArgumentException("No such transaction with id: " + id);
+        }
         repository.deleteById(id);
     }
 
     public TransactionDTO updateById(TransactionDTO dto) {
-        TransactionEntity entity = repository.findById(dto.id()).orElseThrow(() -> new IllegalArgumentException("No such transaction"));
+        TransactionEntity entity = repository.findById(dto.id()).orElseThrow(() -> new IllegalArgumentException("Transaction with id " + dto.id() + " not found"));
         if (dto.description() != null) {
             entity.setDescription(dto.description());
-        } else if (dto.amount() != null) {
+        }
+        if (dto.amount() != null) {
             entity.setAmount(dto.amount());
         }
         return mapper.toDto(repository.save(entity));
     }
 
     public Double getSummary() {
-        List<TransactionDTO> transactions = getTransactions();
-        return transactions.stream().mapToDouble(TransactionDTO::amount).sum();
+        return repository.sumAllAmounts();
     }
 
     public Double getSummaryByMonth(Month month) {
