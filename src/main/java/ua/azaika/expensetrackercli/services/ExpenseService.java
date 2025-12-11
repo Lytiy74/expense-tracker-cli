@@ -41,12 +41,7 @@ public class ExpenseService {
 
     public TransactionDTO updateById(TransactionDTO dto) {
         TransactionEntity entity = repository.findById(dto.id()).orElseThrow(() -> new IllegalArgumentException("Transaction with id " + dto.id() + " not found"));
-        if (dto.description() != null) {
-            entity.setDescription(dto.description());
-        }
-        if (dto.amount() != null) {
-            entity.setAmount(dto.amount());
-        }
+        mapper.updateEntityFromDto(dto, entity);
         return mapper.toDto(repository.save(entity));
     }
 
